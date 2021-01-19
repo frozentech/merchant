@@ -26,6 +26,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 
 	err = upload.Upload("myfile", r)
 	if err != nil {
+		Log.Print("ERROR ", err.Error())
 		resp = merchantError.StatusRecord(merchantError.UploadFailed)
 		Output(w, resp.Error.Status, resp)
 		return
