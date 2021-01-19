@@ -34,24 +34,16 @@ func (me *Upload) Upload(name string, r *http.Request) (err error) {
 
 	filename := fmt.Sprintf("upload-%s.png", GenerateUUID())
 
-	me.Filename = fmt.Sprintf("/tmp/%s", filename)
+	me.Filename = fmt.Sprintf("/assets/%s", filename)
 	me.Size = fmt.Sprintf("%+v", handler.Size)
 	me.Header = fmt.Sprintf("%+v", handler.Header)
-
-	// Create a temporary file within our temp-images directory that follows
-	// a particular naming pattern
-
-	tempFile, err := ioutil.TempFile("/tmp", filename)
-	defer tempFile.Close()
-	if err != nil {
-		return
-	}
 
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		return
 	}
 
-	_, err = tempFile.Write(fileBytes)
+	err = ioutil.WriteFile("/tmp/"+filename, fileBytes, 0644)
+
 	return
 }

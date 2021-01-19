@@ -22,6 +22,7 @@ func NewApp() *App {
 // SetUpRouter ...
 func (a *App) SetUpRouter() {
 
+	a.Router.HandleFunc("/assets/{filename}", Download)
 	a.Router.HandleFunc("/merchant", Merchants)
 	a.Router.HandleFunc("/merchant/{merchantId}", Merchant)
 	a.Router.HandleFunc("/merchant/{merchantId}/upload", Upload)
