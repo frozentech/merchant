@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/frozentech/logs"
@@ -15,6 +16,17 @@ import (
 
 // Log ...
 var Log *logs.Log
+
+// EmailRegex ...
+var EmailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+
+// IsEmailValid is email valid
+func IsEmailValid(e string) bool {
+	if len(e) < 3 && len(e) > 254 {
+		return false
+	}
+	return EmailRegex.MatchString(e)
+}
 
 // Options ...
 func Options(w http.ResponseWriter, r *http.Request) {

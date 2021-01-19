@@ -16,6 +16,7 @@ const (
 	DatabaseOperationFailure
 	DuplicateEmailAddress
 	UploadFailed
+	InvalidEmailAddress
 	InvalidPageValue
 	InvalidLimitValue
 )

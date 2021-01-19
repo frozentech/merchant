@@ -65,6 +65,14 @@ func MembersPost(w *Response, r *http.Request) {
 		return
 	}
 
+	if request.Email != "" {
+		if !IsEmailValid(request.Email) {
+			resp = merchantError.StatusRecord(merchantError.InvalidEmailAddress)
+			Output(w, resp.Error.Status, resp)
+			return
+		}
+	}
+
 	member.MerchantID = merchant.ID
 	member.Email = request.Email
 	member.Name = request.Name

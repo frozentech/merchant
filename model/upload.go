@@ -38,7 +38,7 @@ func (me *Upload) Upload(name string, r *http.Request) (err error) {
 
 	// Create a temporary file within our temp-images directory that follows
 	// a particular naming pattern
-	tempFile, err := ioutil.TempFile("/tmp", "upload-*.png")
+	tempFile, err := ioutil.TempFile("/assets", "upload-*.png")
 	defer tempFile.Close()
 	if err != nil {
 		return
