@@ -1,0 +1,296 @@
+swagger: '2.0'
+info:
+  title: Merchant
+  description: Merchant
+  version: 1.0.0
+host: '127.0.0.1:8080'
+schemes:
+  - https
+tags:
+  - name: Merchant
+    description: Merchant API
+  - name: Member
+    description: Member API
+produces:
+  - application/json
+paths:
+  /merchant:
+    post:
+      tags:
+        - Merchant
+      summary: Create a new Merchant
+      description: Create a new Merchant
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewMerchant'
+      responses:
+        '201':
+          description: OK
+          schema:
+            $ref: '#/definitions/MerchantResponse'
+    get:
+      tags:
+        - Merchant
+      summary: Fetch Merchant List
+      description: Fetch Merchant List
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          description: Page number
+          type: number
+        - in: query
+          name: limit
+          description: Number of record per page
+          type: number
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MerchantRecords'
+  '/merchant/{merchantId}':
+    put:
+      tags:
+        - Merchant
+      summary: Update Merchant
+      description: Update Merchant
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: merchantId
+          description: Merchant ID
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewMerchant'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MerchantResponse'
+    delete:
+      tags:
+        - Merchant
+      summary: Delete Merchant
+      description: Delete Merchant
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: merchantId
+          description: Merchant ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteResponse'
+
+
+  /merchant/{merchantId}/member:
+    post:
+      tags:
+        - Member
+      summary: Create a new Member
+      description: Create a new Member
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewMember'
+      responses:
+        '201':
+          description: OK
+          schema:
+            $ref: '#/definitions/MemberResponse'
+    get:
+      tags:
+        - Member
+      summary: Fetch Member List
+      description: Fetch Member List
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: page
+          description: Page number
+          type: number
+        - in: query
+          name: limit
+          description: Number of record per page
+          type: number
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MemberRecords'
+  '/merchant/{merchantId}/member/{memberId}':
+    put:
+      tags:
+        - Member
+      summary: Update Merchant
+      description: Update Merchant
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: merchantId
+          description: Merchant ID
+          required: true
+          type: string
+        - in: path
+          name: memberId
+          description: Member ID
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewMember'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MemberResponse'
+    delete:
+      tags:
+        - Member
+      summary: Delete Member
+      description: Delete Member
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: merchantId
+          description: Merchant ID
+          required: true
+          type: string
+        - in: path
+          name: memberId
+          description: Member ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteResponse'
+
+definitions:
+  DeleteResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+
+  NewMerchant:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Pace Enterprice PTE LTD
+        description: Merchant Name
+
+  MerchantResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+      result:
+        $ref: '#/definitions/ItemMerchant'
+
+  MerchantRecords:
+    type: object
+    properties:
+      count:
+        type: number
+      page:
+        type: number
+      record:
+        type: array
+        items:
+          $ref: '#/definitions/ItemMerchant'
+  ItemMerchant:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Merchant ID
+      name:
+        type: string
+        example: Pace Enterprice PTE LTD
+        description: Merchant Name
+      image:
+        type: string
+        example: 'http://127.0.0.1/assets/image.png'
+        description: Image URL
+      created_at:
+        type: string
+        example: '2020-01-01 08:00:00'
+        description: Date created
+
+  NewMember:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Pace Enterprice PTE LTD
+        description: Member Name
+      email:
+        type: string
+        format: email
+        description: Member Email
+
+  MemberResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+      result:
+        $ref: '#/definitions/ItemMember'
+  MemberRecords:
+    type: object
+    properties:
+      count:
+        type: number
+      page:
+        type: number
+      record:
+        type: array
+        items:
+         $ref: '#/definitions/ItemMember'
+  ItemMember:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Member ID
+      name:
+        type: string
+        example: Pace Enterprice PTE LTD
+        description: Member Name
+      email:
+        type: string
+        example: 'email@email.com'
+        description: Email Address
+      created_at:
+        type: string
+        example: '2020-01-01 08:00:00'
+        description: Date created
