@@ -68,6 +68,11 @@ var ErrorMessages = map[int]model.Error{
 		Code:    fmt.Sprintf("%04d", DuplicateEmailAddress),
 		Message: "Duplicate Email Address",
 	},
+	InvalidEmailAddress: model.Error{
+		Status:  http.StatusBadRequest,
+		Code:    fmt.Sprintf("%04d", InvalidEmailAddress),
+		Message: "Invalid Email Address",
+	},
 }
 
 // StatusRecord ...
