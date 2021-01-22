@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/frozentech/merchant/query"
+	"github.com/frozentech/database"
+	"github.com/frozentech/query"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -28,14 +29,14 @@ type Member struct {
 // NewMember ...
 func NewMember() *Member {
 	return &Member{
-		ID:       GenerateUUID(),
-		CreateAt: time.Now().Format(MYSQLTimestampFormat),
+		ID:       query.GenerateUUID(),
+		CreateAt: time.Now().Format(query.MYSQLTimestampFormat),
 	}
 }
 
 // DB returns the DB used to connect the Member table
 func (me Member) DB() *sqlx.DB {
-	return DB
+	return database.GetConnection()
 }
 
 // FindByMechantID Find By Mechant ID

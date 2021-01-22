@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/frozentech/query"
 )
 
 const (
@@ -32,7 +34,7 @@ func (me *Upload) Upload(name string, r *http.Request) (err error) {
 		return
 	}
 
-	filename := fmt.Sprintf("upload-%s.png", GenerateUUID())
+	filename := fmt.Sprintf("upload-%s.png", query.GenerateUUID())
 
 	me.Filename = fmt.Sprintf("/assets/%s", filename)
 	me.Size = fmt.Sprintf("%+v", handler.Size)

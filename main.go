@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/frozentech/database"
 	"github.com/frozentech/logs"
 	"github.com/frozentech/merchant/controller"
-	"github.com/frozentech/merchant/model"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
@@ -43,7 +43,7 @@ func setupDB() {
 		log.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
 
-	model.DB = tdb
+	database.SetConnection(tdb)
 
 	b, err := ioutil.ReadFile("create-schema.sqlite.sql")
 
@@ -52,7 +52,8 @@ func setupDB() {
 		panic(err)
 	}
 
-	model.DB.MustExecContext(context.Background(), string(b))
+	db := database.GetConnection()
+	db.MustExecContext(context.Background(), string(b))
 }
 
 func main() {
@@ -78,21 +79,23 @@ func main() {
 		setupDB()
 	} else {
 		defer func() {
-			if model.DB != nil {
-				model.DB.Close()
-				model.IsClose = true
-			}
+			database.Destroy()
 		}()
 
-		if model.DB == nil || model.IsClose == true {
-			controller.Log.Print("database: connecting")
-			model.DB, err = model.ConnectDB()
-			if err != nil {
-				controller.Log.Print("database: ", err.Error())
-				panic(err)
-			}
-			controller.Log.Print("database: connected")
+		controller.Log.Print("database: connecting")
+		err = database.Connect(os.Getenv("ENV_DB_USERNAME"),
+			os.Getenv("ENV_DB_PASSWORD"),
+			os.Getenv("ENV_DB_HOST"),
+			os.Getenv("ENV_DB_PORT"),
+			os.Getenv("ENV_DB_NAME"),
+			os.Getenv("ENV_DB_ENGINE"))
+
+		if err != nil {
+			controller.Log.Print("database: ", err.Error())
+			panic(err)
 		}
+
+		controller.Log.Print("database: connected")
 	}
 
 	app := controller.NewApp()
